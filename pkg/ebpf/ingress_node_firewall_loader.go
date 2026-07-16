@@ -669,7 +669,7 @@ func (infc *IngNodeFwController) getStaleKeys(desiredKeys []BpfLpmIpKeySt) ([]Bp
 // getStaleInterfaceKeys returns the keys for all rules that belong to stale interfaces, meaning interfaces
 // that are not attached any more.
 //
-//nolint:golint,unused
+//nolint:revive,unused
 func (infc *IngNodeFwController) getStaleInterfaceKeys() ([]BpfLpmIpKeySt, error) {
 	objs := infc.objs
 
