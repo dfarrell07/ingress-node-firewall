@@ -16,13 +16,16 @@ linters:
         - (*crypto/tls.Conn).Close
         - (*io.PipeWriter).Close
         - (*bufio.Writer).Flush
-
-issues:
-  exclude-rules:
-    - linters:
-        - staticcheck
-      text: "ST1001"
-      path: _test\.go|test/
-    - linters:
-        - staticcheck
-      text: "QF"
+  exclusions:
+    rules:
+      - linters:
+          - staticcheck
+        text: "ST1001"
+        path: '_test\.go|test/'
+      - linters:
+          - staticcheck
+        text: "QF"
+      - linters:
+          - staticcheck
+        text: "scheme.Builder is deprecated"
+        path: 'api/'
