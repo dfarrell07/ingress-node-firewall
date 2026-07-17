@@ -13,9 +13,15 @@ linters:
         - (*os.File).Close
         - (net.Conn).Close
         - (net.Listener).Close
+        - (*crypto/tls.Conn).Close
+        - (*io.PipeWriter).Close
         - (*bufio.Writer).Flush
     staticcheck:
       checks:
         - "all"
         - "-QF*"
+        - "-ST1000"
         - "-ST1001"
+        - "-ST1003"
+        - "-ST1020"
+        - "-ST1021"
