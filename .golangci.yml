@@ -12,3 +12,11 @@ linters:
       - linters: [staticcheck]
         text: "ST1001"
         path: "test/"
+      - linters: [staticcheck]
+        text: "ST1005"
+      - linters: [staticcheck]
+        text: "QF1008"
+      - linters: [staticcheck]
+        text: "QF1001"
+      - linters: [staticcheck]
+        text: "QF1003"
