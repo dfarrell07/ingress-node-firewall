@@ -1,0 +1,27 @@
+version: "2"
+
+linters:
+  default: standard
+  settings:
+    errcheck:
+      exclude-functions:
+        - fmt.Fprintf
+        - fmt.Fprintln
+        - (*crypto/tls.Conn).Close
+        - (*io.PipeWriter).Close
+        - (*os.File).Close
+        - (io.Closer).Close
+        - (io.WriteCloser).Close
+        - (net.Conn).Close
+        - (net.Listener).Close
+    staticcheck:
+      checks:
+        - "all"
+        - "-ST1000"
+        - "-ST1001"
+        - "-ST1003"
+        - "-ST1020"
+        - "-ST1021"
+        - "-QF1001"
+        - "-QF1003"
+        - "-QF1008"
