@@ -7,5 +7,14 @@ linters:
         - fmt.Fprintf
         - fmt.Fprintln
         - fmt.Fprint
+        - (*os.File).Close
+        - (*net.TCPListener).Close
+        - (*net.TCPConn).Close
         - (io.Closer).Close
         - (net.Conn).Close
+        - (*io.PipeWriter).Close
+    staticcheck:
+      checks:
+        - "all"
+        - "-QF*"
+        - "-ST1001"
