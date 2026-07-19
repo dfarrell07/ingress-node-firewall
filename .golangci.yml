@@ -1,0 +1,36 @@
+version: "2"
+linters:
+  default: standard
+  exclusions:
+    rules:
+      - path: api/
+        linters: [staticcheck]
+        text: "SA1019.*scheme.Builder"
+  settings:
+    errcheck:
+      exclude-functions:
+        - fmt.Fprintf
+        - fmt.Fprintln
+        - fmt.Fprint
+        - (*os.File).Close
+        - (*net.TCPConn).Close
+        - (*crypto/tls.Conn).Close
+        - (io.Closer).Close
+        - (net.Conn).Close
+        - (net.Listener).Close
+        - (*io.PipeWriter).Close
+    staticcheck:
+      checks:
+        - "all"
+        - "-SA4010"
+        - "-S1039"
+        - "-ST1000"
+        - "-ST1001"
+        - "-ST1003"
+        - "-ST1005"
+        - "-ST1019"
+        - "-ST1020"
+        - "-ST1021"
+        - "-QF1001"
+        - "-QF1003"
+        - "-QF1008"

@@ -386,7 +386,7 @@ lint: ## Run golangci-lint against code.
 ifeq ($(CONTAINER_RUNNABLE), 0)
 	@GOPATH=${GOPATH} ./hack/lint.sh $(CONTAINER_RUNTIME)
 else
-	GOFLAGS="" GOLANGCI_LINT_CACHE=/tmp/golangci-lint-cache go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@$(GOLANGCI_LINT_VERSION) 2>/dev/null && GOLANGCI_LINT_CACHE=/tmp/golangci-lint-cache golangci-lint run --verbose --timeout=15m0s
+	GOFLAGS="" GOLANGCI_LINT_CACHE=/tmp/golangci-lint-cache go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@$(GOLANGCI_LINT_VERSION) 2>/dev/null && GOLANGCI_LINT_CACHE=/tmp/golangci-lint-cache golangci-lint run --verbose --modules-download-mode=vendor --timeout=15m0s
 endif
 
 .PHONY: vendors
