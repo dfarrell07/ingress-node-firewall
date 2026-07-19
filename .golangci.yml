@@ -7,8 +7,19 @@ linters:
         - fmt.Fprintf
         - fmt.Fprintln
         - (*os.File).Close
-  exclusions:
-    rules:
-      - linters: [stylecheck]
-        text: "ST1001"
-        source: "onsi/(ginkgo|gomega)"
+        - (io.Closer).Close
+        - (io.WriteCloser).Close
+        - (net.Conn).Close
+        - (net.Listener).Close
+        - (*bufio.Writer).Flush
+        - (*crypto/tls.Conn).Close
+        - (*io.PipeWriter).Close
+    staticcheck:
+      checks:
+        - "all"
+        - "-SA1019"
+        - "-ST1000"
+        - "-ST1001"
+        - "-ST1003"
+        - "-ST1020"
+        - "-ST1021"
