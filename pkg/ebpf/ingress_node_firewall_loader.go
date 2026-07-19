@@ -135,22 +135,22 @@ func NewIngNodeFwController() (*IngNodeFwController, error) {
 
 		klog.Info("BPFManager mode: loading ingress firewall pinned maps")
 		mPath := path.Join(pinDir, "ingress_node_firewall_events_map")
-		infc.objs.BpfMaps.IngressNodeFirewallEventsMap, err = ebpf.LoadPinnedMap(mPath, opts)
+		infc.objs.IngressNodeFirewallEventsMap, err = ebpf.LoadPinnedMap(mPath, opts)
 		if err != nil {
 			return nil, fmt.Errorf("failed to load %s: %w", mPath, err)
 		}
 		mPath = path.Join(pinDir, "ingress_node_firewall_statistics_map")
-		infc.objs.BpfMaps.IngressNodeFirewallStatisticsMap, err = ebpf.LoadPinnedMap(mPath, opts)
+		infc.objs.IngressNodeFirewallStatisticsMap, err = ebpf.LoadPinnedMap(mPath, opts)
 		if err != nil {
 			return nil, fmt.Errorf("failed to load %s: %w", mPath, err)
 		}
 		mPath = path.Join(pinDir, "ingress_node_firewall_table_map")
-		infc.objs.BpfMaps.IngressNodeFirewallTableMap, err = ebpf.LoadPinnedMap(mPath, opts)
+		infc.objs.IngressNodeFirewallTableMap, err = ebpf.LoadPinnedMap(mPath, opts)
 		if err != nil {
 			return nil, fmt.Errorf("failed to load %s: %w", mPath, err)
 		}
 		mPath = path.Join(pinDir, "ingress_node_firewall_dbg_map")
-		infc.objs.BpfMaps.IngressNodeFirewallDbgMap, err = ebpf.LoadPinnedMap(mPath, opts)
+		infc.objs.IngressNodeFirewallDbgMap, err = ebpf.LoadPinnedMap(mPath, opts)
 		if err != nil {
 			return nil, fmt.Errorf("failed to load %s: %w", mPath, err)
 		}
@@ -191,11 +191,11 @@ func NewIngNodeFwController() (*IngNodeFwController, error) {
 func (infc *IngNodeFwController) IngressNodeFwRulesLoader(
 	ifaceIngressRules map[string][]ingressnodefwiov1alpha1.IngressNodeFirewallRules) error {
 	// Get eBPF objs to create/update eBPF maps and get map info.
-	info, err := infc.objs.BpfMaps.IngressNodeFirewallTableMap.Info()
+	info, err := infc.objs.IngressNodeFirewallTableMap.Info()
 	if err != nil {
 		return fmt.Errorf("cannot get map info: %v", err)
 	}
-	klog.Infof("Ingress node firewall map Info: %+v with FD %s", info, infc.objs.BpfMaps.IngressNodeFirewallTableMap.String())
+	klog.Infof("Ingress node firewall map Info: %+v with FD %s", info, infc.objs.IngressNodeFirewallTableMap.String())
 
 	// Convert IngressNodeFirewallRules into data that can be written to the BPF map.
 	// Build a map of valid ebpfKeys pointing to the ebpfRules that should be associated to them.
@@ -261,7 +261,7 @@ func (infc *IngNodeFwController) IngressNodeFwRulesLoader(
 func (infc *IngNodeFwController) addOrUpdateRules(ebpfKeyToRules map[BpfLpmIpKeySt]BpfRulesValSt) error {
 	for ebpfKey, ebpfRules := range ebpfKeyToRules {
 		log.Printf("Adding or updating ingress firewall rules for key %v", ebpfKey)
-		if err := infc.objs.BpfMaps.IngressNodeFirewallTableMap.Update(ebpfKey, ebpfRules, ebpf.UpdateAny); err != nil {
+		if err := infc.objs.IngressNodeFirewallTableMap.Update(ebpfKey, ebpfRules, ebpf.UpdateAny); err != nil {
 			return fmt.Errorf("failed adding/updating ingress firewall rules: %v", err)
 		}
 	}
@@ -360,7 +360,7 @@ func (infc *IngNodeFwController) GetBPFMapContentForTest() (map[BpfLpmIpKeySt]Bp
 	keysToRules := make(map[BpfLpmIpKeySt]BpfRulesValSt)
 	var key BpfLpmIpKeySt
 	var value BpfRulesValSt
-	iterator := objs.BpfMaps.IngressNodeFirewallTableMap.Iterate()
+	iterator := objs.IngressNodeFirewallTableMap.Iterate()
 	for iterator.Next(&key, &value) {
 		keysToRules[key] = value
 	}
@@ -639,7 +639,7 @@ func (infc *IngNodeFwController) getStaleKeys(desiredKeys []BpfLpmIpKeySt) ([]Bp
 	var staleKeys []BpfLpmIpKeySt
 	var key BpfLpmIpKeySt
 	var value BpfRulesValSt
-	iterator := objs.BpfMaps.IngressNodeFirewallTableMap.Iterate()
+	iterator := objs.IngressNodeFirewallTableMap.Iterate()
 	for iterator.Next(&key, &value) {
 		keyFound := false
 		for _, desiredKey := range desiredKeys {
@@ -685,7 +685,7 @@ func (infc *IngNodeFwController) getStaleInterfaceKeys() ([]BpfLpmIpKeySt, error
 	var keysToDelete []BpfLpmIpKeySt
 	var key BpfLpmIpKeySt
 	var value BpfRulesValSt
-	iterator := objs.BpfMaps.IngressNodeFirewallTableMap.Iterate()
+	iterator := objs.IngressNodeFirewallTableMap.Iterate()
 	for iterator.Next(&key, &value) {
 		keyFound := false
 		for _, validID := range validInterfaceIDs {
@@ -719,7 +719,7 @@ func (infc *IngNodeFwController) purgeKeys(keys []BpfLpmIpKeySt) error {
 	// Delete all keys that should be deleted.
 	for _, keyToDelete := range keys {
 		klog.Infof("Purging key %v", keyToDelete)
-		err := objs.BpfMaps.IngressNodeFirewallTableMap.Delete(keyToDelete)
+		err := objs.IngressNodeFirewallTableMap.Delete(keyToDelete)
 		if err != nil {
 			errors = append(errors, err)
 		}

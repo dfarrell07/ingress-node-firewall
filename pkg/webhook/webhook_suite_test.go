@@ -588,24 +588,27 @@ func getIngressNodeFirewall(name string) *ingressnodefwv1alpha1.IngressNodeFirew
 func initCIDRTransportRule(inf *ingressnodefwv1alpha1.IngressNodeFirewall, cidr string, order uint32, protocol ingressnodefwv1alpha1.IngressNodeFirewallRuleProtocolType,
 	ports string, action ingressnodefwv1alpha1.IngressNodeFirewallActionType) {
 
-	rule := ingressnodefwv1alpha1.IngressNodeFirewallRules{
-		SourceCIDRs: []string{cidr},
-		FirewallProtocolRules: []ingressnodefwv1alpha1.IngressNodeFirewallProtocolRule{
-			getTCPRule(order, protocol, ports, action),
-		},
-	}
-	if protocol == ingressnodefwv1alpha1.ProtocolTypeUDP {
+	var rule ingressnodefwv1alpha1.IngressNodeFirewallRules
+	switch protocol {
+	case ingressnodefwv1alpha1.ProtocolTypeUDP:
 		rule = ingressnodefwv1alpha1.IngressNodeFirewallRules{
 			SourceCIDRs: []string{cidr},
 			FirewallProtocolRules: []ingressnodefwv1alpha1.IngressNodeFirewallProtocolRule{
 				getUDPRule(order, protocol, ports, action),
 			},
 		}
-	} else if protocol == ingressnodefwv1alpha1.ProtocolTypeSCTP {
+	case ingressnodefwv1alpha1.ProtocolTypeSCTP:
 		rule = ingressnodefwv1alpha1.IngressNodeFirewallRules{
 			SourceCIDRs: []string{cidr},
 			FirewallProtocolRules: []ingressnodefwv1alpha1.IngressNodeFirewallProtocolRule{
 				getSCTPRule(order, protocol, ports, action),
+			},
+		}
+	default:
+		rule = ingressnodefwv1alpha1.IngressNodeFirewallRules{
+			SourceCIDRs: []string{cidr},
+			FirewallProtocolRules: []ingressnodefwv1alpha1.IngressNodeFirewallProtocolRule{
+				getTCPRule(order, protocol, ports, action),
 			},
 		}
 	}

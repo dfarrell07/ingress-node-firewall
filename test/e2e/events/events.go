@@ -70,11 +70,12 @@ func extractEventsFromString(str string) ([]TestEvent, error) {
 		te.SourceAddress = match[transportEventPattern.SubexpIndex("srcaddr")]
 		te.DestinationAddress = match[transportEventPattern.SubexpIndex("dstaddr")]
 		actionStr := match[transportEventPattern.SubexpIndex("action")]
-		if actionStr == "Drop" {
+		switch actionStr {
+		case "Drop":
 			te.Action = ingressnodefwiov1alpha1.IngressNodeFirewallDeny
-		} else if actionStr == "Allow" {
+		case "Allow":
 			te.Action = ingressnodefwiov1alpha1.IngressNodeFirewallAllow
-		} else {
+		default:
 			return nil, fmt.Errorf("unknown 'Action' %q", actionStr)
 		}
 		protocolStr := match[transportEventPattern.SubexpIndex("proto")]
@@ -102,11 +103,12 @@ func extractEventsFromString(str string) ([]TestEvent, error) {
 		te.SourceAddress = match[icmpEventPattern.SubexpIndex("srcaddr")]
 		te.DestinationAddress = match[icmpEventPattern.SubexpIndex("dstaddr")]
 		actionStr := match[icmpEventPattern.SubexpIndex("action")]
-		if actionStr == "Drop" {
+		switch actionStr {
+		case "Drop":
 			te.Action = ingressnodefwiov1alpha1.IngressNodeFirewallDeny
-		} else if actionStr == "Allow" {
+		case "Allow":
 			te.Action = ingressnodefwiov1alpha1.IngressNodeFirewallAllow
-		} else {
+		default:
 			return nil, fmt.Errorf("unknown 'Action' %q", actionStr)
 		}
 		protocolStr := match[icmpEventPattern.SubexpIndex("proto")]

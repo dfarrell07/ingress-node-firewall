@@ -106,7 +106,7 @@ func (r *IngressNodeFirewallConfigReconciler) Reconcile(ctx context.Context, req
 		condition = status.ConditionDegraded
 		err = errors.Wrapf(err, "FailedToSyncIngressNodeFirewallConfigResources")
 	} else {
-		err = status.IsIngressNodeFirewallConfigAvailable(ctx, r.Client, req.NamespacedName.Namespace)
+		err = status.IsIngressNodeFirewallConfigAvailable(ctx, r.Client, req.Namespace)
 		if err != nil {
 			if _, ok := err.(status.IngressNodeFirewallConfigResourcesNotReadyError); ok {
 				ctrResult = ctrl.Result{RequeueAfter: 5 * time.Second}

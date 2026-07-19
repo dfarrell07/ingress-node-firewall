@@ -92,7 +92,7 @@ func prepareBpfApplication(bpfApp *bpfmaniov1alpha1.ClusterBpfApplication, obj *
 		value = 1
 	}
 	binary.NativeEndian.PutUint32(debug, value)
-	bpfApp.Spec.BpfAppCommon.GlobalData = map[string][]byte{
+	bpfApp.Spec.GlobalData = map[string][]byte{
 		debugLookup: debug,
 	}
 
@@ -101,7 +101,7 @@ func prepareBpfApplication(bpfApp *bpfmaniov1alpha1.ClusterBpfApplication, obj *
 	}
 	bpfApp.Spec.NodeSelector = obj.Spec.NodeSelector
 
-	bpfApp.Spec.BpfAppCommon.ByteCode = bpfmaniov1alpha1.ByteCodeSelector{
+	bpfApp.Spec.ByteCode = bpfmaniov1alpha1.ByteCodeSelector{
 		Image: &bpfmaniov1alpha1.ByteCodeImage{
 			Url:             ingressNodeFirewallBCImage,
 			ImagePullPolicy: bpfmaniov1alpha1.PullIfNotPresent,

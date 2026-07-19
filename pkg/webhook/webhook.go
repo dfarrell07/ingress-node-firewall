@@ -194,13 +194,14 @@ func isConflictWithSafeRulesTransport(rule ingressnodefwv1alpha1.IngressNodeFire
 	var start, end uint16
 	var r *ingressnodefwv1alpha1.IngressNodeFirewallProtoRule
 
-	if rule.ProtocolConfig.Protocol == ingressnodefwv1alpha1.ProtocolTypeTCP {
+	switch rule.ProtocolConfig.Protocol {
+	case ingressnodefwv1alpha1.ProtocolTypeTCP:
 		failSafeRules = failsaferules.GetTCP()
 		r = rule.ProtocolConfig.TCP
-	} else if rule.ProtocolConfig.Protocol == ingressnodefwv1alpha1.ProtocolTypeUDP {
+	case ingressnodefwv1alpha1.ProtocolTypeUDP:
 		failSafeRules = failsaferules.GetUDP()
 		r = rule.ProtocolConfig.UDP
-	} else {
+	default:
 		return false, fmt.Errorf("unable to determine conflict rules for unknown protocol: %q", rule.ProtocolConfig.Protocol)
 	}
 

@@ -123,5 +123,5 @@ func (r *IngressNodeFirewallNodeStateReconciler) reconcileResource(
 }
 
 func isNodeStateDeletionInProgress(nodeState *infv1alpha1.IngressNodeFirewallNodeState) bool {
-	return !nodeState.ObjectMeta.DeletionTimestamp.IsZero()
+	return !nodeState.DeletionTimestamp.IsZero()
 }

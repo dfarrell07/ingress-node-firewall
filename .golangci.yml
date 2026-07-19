@@ -7,3 +7,8 @@ linters:
         - fmt.Fprintf
         - fmt.Fprintln
         - (*os.File).Close
+  exclusions:
+    rules:
+      - linters: [stylecheck]
+        text: "ST1001"
+        source: "onsi/(ginkgo|gomega)"
