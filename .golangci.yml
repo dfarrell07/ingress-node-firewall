@@ -17,4 +17,17 @@ linters:
       checks:
         - "all"
         - "-QF*"
+        - "-ST1000"
         - "-ST1001"
+        - "-ST1003"
+        - "-ST1020"
+        - "-ST1021"
+  exclusions:
+    rules:
+      - path: "api/v1alpha1/groupversion_info.go"
+        linters:
+          - staticcheck
+        text: "SA1019: scheme.Builder is deprecated"
+      - linters:
+          - errcheck
+        text: "Close"
