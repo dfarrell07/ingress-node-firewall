@@ -3,7 +3,7 @@ set -eux
 
 DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
-KIND_IMAGE="kindest/node:v1.27.3"
+KIND_IMAGE="kindest/node:v1.36.1"
 # Direct push from alpines offical docker repository to quay in order not to hit dockers rate limiting.
 BPF_MOUNTER_IMAGE="quay.io/ingressnodefirewall/alpine:3.14"
 
@@ -34,15 +34,19 @@ nodes:
   kubeadmConfigPatches:
   - |
     kind: ClusterConfiguration
+    apiVersion: kubeadm.k8s.io/v1beta4
     apiServer:
         extraArgs:
-            v: "5"
+          - name: "v"
+            value: "5"
     controllerManager:
         extraArgs:
-            v: "5"
+          - name: "v"
+            value: "5"
     scheduler:
         extraArgs:
-            v: "5"
+          - name: "v"
+            value: "5"
 - role: worker
 - role: worker
 EOF
