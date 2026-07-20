@@ -3,7 +3,6 @@ package nodefwloader
 import (
 	"errors"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"net"
 	"os"
@@ -427,7 +426,7 @@ func (infc *IngNodeFwController) cleaneBPFObjs() error {
 
 // removeAllPins removes all pins for XDP.
 func (infc *IngNodeFwController) removeAllPins() error {
-	files, err := ioutil.ReadDir(infc.pinPath)
+	entries, err := os.ReadDir(infc.pinPath)
 	if err != nil {
 		if os.IsNotExist(err) {
 			return nil
@@ -439,7 +438,7 @@ func (infc *IngNodeFwController) removeAllPins() error {
 	if err != nil {
 		return err
 	}
-	for _, file := range files {
+	for _, file := range entries {
 		if re.Match([]byte(file.Name())) {
 			// Note cilium Link unpin path also removes the pinPath, so avoid
 			// generating errors if the file has been already removed.
