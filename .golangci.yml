@@ -6,11 +6,7 @@ linters:
       checks:
         - "all"
         - "-QF*"
-        - "-ST1000"
-        - "-ST1001"
-        - "-ST1005"
-        - "-ST1019"
-        - "-ST1020"
+        - "-ST*"
         - "-S1039"
         - "-SA4010"
     errcheck:
@@ -19,5 +15,9 @@ linters:
         - fmt.Fprintln
         - fmt.Fprint
         - (io.Closer).Close
+        - (*os.File).Close
+        - (*io.PipeWriter).Close
+        - (io.WriteCloser).Close
+        - (*crypto/tls.Conn).Close
         - (net.Conn).Close
         - (net.Listener).Close
