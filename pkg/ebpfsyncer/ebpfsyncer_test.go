@@ -968,7 +968,7 @@ func TestVerifyBPFKeysAfterInterfaceIngressRulesUpdate(t *testing.T) {
 		if err != nil {
 			// FIXME: This must be improved for tests with isDelete as we currently only check that the
 			// map is set to nil but with the current test methodology we aren't verifying that the map is gone.
-			if !(tc.isDelete && strings.Contains(err.Error(), "Nil pointer to node firewall loader")) {
+			if !(tc.isDelete && strings.Contains(err.Error(), "nil pointer to node firewall loader")) {
 				t.Fatalf("TestVerifyBPFKeysAfterInterfaceIngressRulesUpdate(%d): Could not get eBPF map content, err: %q", i, err)
 			}
 		}
@@ -1176,7 +1176,7 @@ func runListenServer(ctx context.Context, protocol, port string) error {
 	if err != nil {
 		return err
 	}
-	defer ln.Close()
+	defer func() { _ = ln.Close() }()
 
 	for {
 		select {
@@ -1190,7 +1190,7 @@ func runListenServer(ctx context.Context, protocol, port string) error {
 			return err
 		}
 		go func(c net.Conn) {
-			defer c.Close()
+			defer func() { _ = c.Close() }()
 			_, err := io.WriteString(c, time.Now().Format("15:04:05\n"))
 			if err != nil {
 				return // e.g., client disconnected
