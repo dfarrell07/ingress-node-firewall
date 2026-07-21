@@ -428,7 +428,7 @@ LOCAL_GENERATOR_IMAGE ?= ebpf-generator:latest
 ##@ eBPF development
 .PHONY: prereqs
 prereqs: ## Check if prerequisites are met, and installing missing dependencies
-	test -f $(shell go env GOPATH)/bin/golangci-lint || GOFLAGS="" go install github.com/golangci/golangci-lint/cmd/golangci-lint@${GOLANGCI_LINT_VERSION}
+	test -f $(shell go env GOPATH)/bin/golangci-lint || GOFLAGS="" go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@${GOLANGCI_LINT_VERSION}
 	test -f $(shell go env GOPATH)/bin/bpf2go || go install github.com/cilium/ebpf/cmd/bpf2go@${CILIUM_EBPF_VERSION}
 	test -f $(shell go env GOPATH)/bin/kind || go install sigs.k8s.io/kind@latest
 
