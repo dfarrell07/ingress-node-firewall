@@ -2,8 +2,8 @@
 
 set -euo pipefail
 
-# pin golangci-lint version to 1.64.8
-VERSION=v1.64.8
+# pin golangci-lint version
+VERSION=v2.12.2
 if [ "$#" -ne 1 ]; then
     echo "Expected command line argument - container runtime (docker/podman) got $# arguments: $@"
     exit 1
