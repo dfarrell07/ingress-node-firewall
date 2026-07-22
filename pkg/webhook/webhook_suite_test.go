@@ -145,7 +145,7 @@ var _ = BeforeSuite(func() {
 		if err != nil {
 			return err
 		}
-		conn.Close()
+		conn.Close() //nolint:errcheck
 		return nil
 	}).Should(Succeed())
 
