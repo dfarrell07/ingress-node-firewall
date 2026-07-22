@@ -14,7 +14,6 @@ import (
 	"github.com/kennygrant/sanitize"
 	"github.com/onsi/ginkgo/config"
 	"github.com/onsi/ginkgo/types"
-	corev1 "k8s.io/api/core/v1"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
@@ -71,7 +70,7 @@ func (r *KubernetesReporter) Dump(dirName string) {
 
 	r.logNodes(dirName)
 	r.logPods(operatorNameSpace, dirName)
-	r.logLogs(func(p *corev1.Pod) bool {
+	r.logLogs(func(p *v1.Pod) bool {
 		return !strings.Contains(p.Namespace, "ingress-node-firewall")
 	}, dirName)
 
@@ -127,7 +126,7 @@ func (r *KubernetesReporter) logNodes(dirName string) {
 	fmt.Fprintln(f, string(j))
 }
 
-func (r *KubernetesReporter) logLogs(filterPods func(*corev1.Pod) bool, dirName string) {
+func (r *KubernetesReporter) logLogs(filterPods func(*v1.Pod) bool, dirName string) {
 	pods, err := r.clients.Pods(v1.NamespaceAll).List(context.Background(), metav1.ListOptions{})
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "failed to fetch pods: %v\n", err)
