@@ -1,0 +1,10 @@
+version: "2"
+default:
+  standard
+linters-settings:
+  errcheck:
+    exclude-functions:
+      - fmt.Fprintf
+      - fmt.Fprintln
+      - (io.Closer).Close
+      - (*os.File).Close
