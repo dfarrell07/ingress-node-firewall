@@ -53,7 +53,7 @@ func DeleteAndWait(cs *testclient.ClientSet, namespace string, timeout time.Dura
 // Exists tells whether the given namespace exists
 func Exists(namespace string, cs *testclient.ClientSet) bool {
 	_, err := cs.Namespaces().Get(context.Background(), namespace, metav1.GetOptions{})
-	return err == nil || !k8sk8serrors.IsNotFound(err)
+	return err == nil || !k8serrors.IsNotFound(err)
 }
 
 // CleanPods deletes all pods in namespace
