@@ -1,0 +1,17 @@
+version: "2"
+linters:
+  default: standard
+  exclusions:
+    rules:
+      - linters: [errcheck]
+        path: (_test\.go|test/)
+      - linters: [staticcheck]
+        text: "QF1001:|QF1003:|QF1008:"
+      - linters: [staticcheck]
+        text: "ST1001:"
+        path: (_test\.go|test/)
+      - linters: [staticcheck]
+        text: "SA1019: scheme.Builder"
+    paths:
+      - third_party
+      - vendor
