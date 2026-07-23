@@ -9,6 +9,7 @@ import (
 	"path"
 	"reflect"
 	"regexp"
+	"slices"
 	"strconv"
 	"strings"
 	"syscall"
@@ -98,7 +99,7 @@ func NewIngNodeFwController() (*IngNodeFwController, error) {
 			}
 			variables := []struct {
 				key   string
-				value interface{}
+				value any
 			}{
 				{debugLookup, uint32(val)},
 			}
@@ -518,7 +519,6 @@ func (infc *IngNodeFwController) makeIngressFwRulesMap(
 
 	// Parse firewall rules
 	for _, rule := range ingFirewallConfig.FirewallProtocolRules {
-		rule := rule
 		idx := rule.Order
 		rules.Rules[idx].RuleId = rule.Order
 		switch rule.ProtocolConfig.Protocol {
@@ -601,7 +601,6 @@ func (infc *IngNodeFwController) makeIngressFwRulesMap(
 
 	// Parse CIDRs to construct map keys with shared rules.
 	for _, cidr := range ingFirewallConfig.SourceCIDRs {
-		cidr := cidr
 		key, err := BuildEBPFKey(ifID, cidr)
 		if err != nil {
 			return keys, rules, err
@@ -688,13 +687,7 @@ func (infc *IngNodeFwController) getStaleInterfaceKeys() ([]BpfLpmIpKeySt, error
 	var value BpfRulesValSt
 	iterator := objs.BpfMaps.IngressNodeFirewallTableMap.Iterate()
 	for iterator.Next(&key, &value) {
-		keyFound := false
-		for _, validID := range validInterfaceIDs {
-			if validID == key.IngressIfindex {
-				keyFound = true
-				break
-			}
-		}
+		keyFound := slices.Contains(validInterfaceIDs, key.IngressIfindex)
 		if !keyFound {
 			keysToDelete = append(keysToDelete, BpfLpmIpKeySt{
 				PrefixLen:      key.PrefixLen,

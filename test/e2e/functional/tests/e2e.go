@@ -851,7 +851,6 @@ var _ = Describe("Ingress Node Firewall", func() {
 		})
 
 		for _, entry := range table {
-			entry := entry
 
 			It(entry.it, func() {
 				var testINFs []*ingressnodefwv1alpha1.IngressNodeFirewall
@@ -871,13 +870,11 @@ var _ = Describe("Ingress Node Firewall", func() {
 				defer cleanupFn()
 				// confirm initial connectivity conditions for all protocols defined before IngressNodeFirewall policy application
 				for _, reach := range entry.reachables {
-					reach := reach
 					reachabilityCheck(reach, podNameObj, entry.protocols, true)
 				}
 
 				// generate IngressNodeFirewall objects from the templates defined
 				for i, testINF := range entry.testINFs {
-					testINF := testINF
 					inf := &ingressnodefwv1alpha1.IngressNodeFirewall{}
 					inf.SetName(fmt.Sprintf("e2e-inf-%d", i))
 					inf.SetLabels(testArtifactsLabelMap)
@@ -885,12 +882,10 @@ var _ = Describe("Ingress Node Firewall", func() {
 					infwutils.DefineWithInterfaces(inf, testINF.interfaces)
 
 					for _, rule := range testINF.testRules {
-						rule := rule
 						var protoRules []ingressnodefwv1alpha1.IngressNodeFirewallProtocolRule
 						var sourceCIDRs []string
 
 						for _, entry := range rule.sourceCIDRsEntries {
-							entry := entry
 							ips := podNameObj[entry.podName].Status.PodIPs
 							if v4Enabled {
 								// convert pod IP to correct CIDR. e.g. IP 172.126.1.1 with prefix 8 will result in CIDR 172.0.0.0/8
@@ -916,23 +911,19 @@ var _ = Describe("Ingress Node Firewall", func() {
 						// find the largest order value seen across all INFs for a given sourceCIDR
 						var nextOrder uint32
 						for _, sourceCIDR := range sourceCIDRs {
-							sourceCIDR := sourceCIDR
 							if sourceCIDROrder := nextSourceCIDRsOrder[sourceCIDR]; sourceCIDROrder > nextOrder {
 								nextOrder = sourceCIDROrder
 							}
 						}
 						// generate the proto rules for each protocol defined
 						for _, protocol := range entry.protocols {
-							protocol := protocol
 							for _, getProtoRuleFn := range rule.protoRules {
-								getProtoRuleFn := getProtoRuleFn
 								protoRules = append(protoRules, getProtoRuleFn(protocol, nextOrder))
 								nextOrder += 1
 							}
 						}
 						// update the highest order seen for all the source CIDRs encountered
 						for _, sourceCIDR := range sourceCIDRs {
-							sourceCIDR := sourceCIDR
 							nextSourceCIDRsOrder[sourceCIDR] = nextOrder
 						}
 
@@ -948,7 +939,6 @@ var _ = Describe("Ingress Node Firewall", func() {
 
 				nodeStateList = &ingressnodefwv1alpha1.IngressNodeFirewallNodeStateList{}
 				for _, testINF := range testINFs {
-					testINF := testINF
 					By(fmt.Sprintf("Creating Ingress node firewall rules %+v", testINF))
 					Eventually(func() error {
 						err := infwutils.CreateIngressNodeFirewall(testclient.Client, testINF, timeout)
@@ -970,7 +960,6 @@ var _ = Describe("Ingress Node Firewall", func() {
 
 				// test INF policy application for all protocols
 				for _, reach := range entry.reachables {
-					reach := reach
 					reachabilityCheck(reach, podNameObj, entry.protocols, reach.connectivity)
 				}
 				// Make sure all rules are deleted before running next test
@@ -1524,7 +1513,6 @@ func isConnectivitySeen(client *testclient.ClientSet, protocol ingressnodefwv1al
 func deleteAllTestRules(testINFs []*ingressnodefwv1alpha1.IngressNodeFirewall, client *testclient.ClientSet, timeout time.Duration,
 	nodeStateList *ingressnodefwv1alpha1.IngressNodeFirewallNodeStateList) {
 	for _, testINF := range testINFs {
-		testINF := testINF
 		Eventually(func() bool {
 			err := infwutils.DeleteIngressNodeFirewall(client, testINF, timeout)
 			return errors.IsNotFound(err)

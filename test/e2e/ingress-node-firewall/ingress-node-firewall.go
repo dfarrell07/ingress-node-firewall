@@ -49,7 +49,7 @@ func LoadIngressNodeFirewallConfigFromFile(config *ingressnodefwv1alpha1.Ingress
 	return loadFromFile(config, fileName)
 }
 
-func loadFromFile(obj interface{}, fileName string) error {
+func loadFromFile(obj any, fileName string) error {
 	f, err := os.Open(fmt.Sprintf("../../../config/samples/%s", fileName))
 	if err != nil {
 		return err
@@ -59,7 +59,7 @@ func loadFromFile(obj interface{}, fileName string) error {
 	return decodeYAML(f, obj)
 }
 
-func decodeYAML(r io.Reader, obj interface{}) error {
+func decodeYAML(r io.Reader, obj any) error {
 	decoder := yaml.NewYAMLToJSONDecoder(r)
 	return decoder.Decode(obj)
 }

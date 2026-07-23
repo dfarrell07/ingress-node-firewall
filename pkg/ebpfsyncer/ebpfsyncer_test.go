@@ -1253,7 +1253,7 @@ func beforeEach(t *testing.T) {
 	// if they already exist).
 	t.Log("By populating the interface list")
 	interfaces = []netlink.Veth{}
-	for i := 0; i < numTestInterfaces; i++ {
+	for i := range numTestInterfaces {
 		// Create interface.
 		la := netlink.NewLinkAttrs()
 		la.Name = fmt.Sprintf("%s%d", interfacePrefix, i)

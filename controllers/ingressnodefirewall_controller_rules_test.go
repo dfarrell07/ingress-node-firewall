@@ -750,7 +750,6 @@ var _ = Describe("IngressNodeFirewall controller rules", func() {
 
 	for s, tc := range tcs {
 		// Deal with the typical golang for range issue by reassigning to a new variable.
-		tc := tc
 		When(fmt.Sprintf("IngressNodeFirewall objects are created for test case: %q", s), func() {
 			It("The resulting IngressNodeFirewallNodeState object should look as expected", func() {
 				By("Creating new IngressNodeFirewall objects")
